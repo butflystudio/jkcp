@@ -18,7 +18,7 @@ public interface KcpListerner {
 	 *            the data
 	 * @param kcp
 	 */
-	public void handleReceive(ByteBuf bb, KcpOnUdp kcp);
+	public void handleReceive(ByteBuf bb, KcpOn kcp);
 
 	/**
 	 *
@@ -29,12 +29,12 @@ public interface KcpListerner {
 	 * @param kcp
 	 *            发生异常的kcp，null表示非kcp错误
 	 */
-	public void handleException(Throwable ex, KcpOnUdp kcp);
+	public void handleException(Throwable ex, KcpOn kcp);
 
 	/**
 	 * 关闭
 	 *
 	 * @param kcp
 	 */
-	public void handleClose(KcpOnUdp kcp);
+	public void handleClose(KcpOn kcp);
 }

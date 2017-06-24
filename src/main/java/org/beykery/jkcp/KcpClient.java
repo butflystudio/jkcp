@@ -34,7 +34,7 @@ public abstract class KcpClient implements Output, KcpListerner, Runnable {
 	private boolean stream;
 	private int minRto = Kcp.IKCP_RTO_MIN;
 	private long timeout;
-	private KcpOnUdp kcp;
+	private KcpOn kcp;
 	private volatile boolean running;
 	private final Object waitLock = new Object();
 	private InetSocketAddress remote;
@@ -178,7 +178,7 @@ public abstract class KcpClient implements Output, KcpListerner, Runnable {
 	}
 
 	@Override
-	public void handleClose(KcpOnUdp kcp) {
+	public void handleClose(KcpOn kcp) {
 		this.close();
 	}
 

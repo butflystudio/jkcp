@@ -1,6 +1,3 @@
-/**
- * 客户端
- */
 package test;
 
 import io.netty.buffer.ByteBuf;
@@ -10,16 +7,11 @@ import java.net.InetSocketAddress;
 import java.nio.charset.Charset;
 import org.beykery.jkcp.Kcp;
 import org.beykery.jkcp.KcpClient;
-import org.beykery.jkcp.KcpOnUdp;
+import org.beykery.jkcp.KcpOn;
 
-/**
- *
- * @author beykery
- */
-public class JkcpLocalClient extends KcpClient {
-
+public class JkcpClient extends KcpClient {
 	@Override
-	public void handleReceive(ByteBuf bb, KcpOnUdp kcp) {
+	public void handleReceive(ByteBuf bb, KcpOn kcp) {
 		String content = bb.toString(Charset.forName("utf-8"));
 		System.out.println("conv:" + kcp.getKcp().getConv() + " recv:" + content + " kcp-->" + kcp);
 		ByteBuf buf = PooledByteBufAllocator.DEFAULT.buffer(2048);
@@ -35,12 +27,12 @@ public class JkcpLocalClient extends KcpClient {
 	 * @param kcp
 	 */
 	@Override
-	public void handleException(Throwable ex, KcpOnUdp kcp) {
+	public void handleException(Throwable ex, KcpOn kcp) {
 		System.out.println(ex);
 	}
 
 	@Override
-	public void handleClose(KcpOnUdp kcp) {
+	public void handleClose(KcpOn kcp) {
 		super.handleClose(kcp);
 		System.out.println("服务器离开:" + kcp);
 		System.out.println("waitSnd:" + kcp.getKcp().waitSnd());
@@ -59,7 +51,7 @@ public class JkcpLocalClient extends KcpClient {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
-		JkcpLocalClient tc = new JkcpLocalClient();
+		JkcpClient tc = new JkcpClient();
 		tc.noDelay(1, 20, 2, 1);
 		tc.setMinRto(10);
 		tc.wndSize(32, 32);

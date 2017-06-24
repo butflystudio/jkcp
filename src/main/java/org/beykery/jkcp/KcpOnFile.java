@@ -15,7 +15,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  *
  * @author beykery
  */
-public class KcpOnUdp implements KcpOn {
+public class KcpOnFile implements KcpOn {
 
 	private final Kcp kcp;// kcp的状态
 	private final Queue<ByteBuf> received;// 输入
@@ -73,7 +73,6 @@ public class KcpOnUdp implements KcpOn {
 	 *
 	 * @param conv
 	 */
-
 	@Override
 	public void setConv(int conv) {
 		this.kcp.setConv(conv);
@@ -84,7 +83,6 @@ public class KcpOnUdp implements KcpOn {
 	 *
 	 * @param stream
 	 */
-
 	@Override
 	public void setStream(boolean stream) {
 		this.kcp.setStream(stream);
@@ -121,7 +119,7 @@ public class KcpOnUdp implements KcpOn {
 	 * @param listerner
 	 *            监听
 	 */
-	public KcpOnUdp(Output out, InetSocketAddress remote, InetSocketAddress local, KcpListerner listerner) {
+	public KcpOnFile(Output out, InetSocketAddress remote, InetSocketAddress local, KcpListerner listerner) {
 		this.listerner = listerner;
 		kcp = new Kcp(out, remote);
 		received = new LinkedBlockingQueue<>();
@@ -317,8 +315,7 @@ public class KcpOnUdp implements KcpOn {
 	 * @return
 	 */
 	@Override
-	public
-	boolean needUpdate() {
+	public boolean needUpdate() {
 		return this.needUpdate;
 	}
 

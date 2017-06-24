@@ -19,7 +19,7 @@ public class KcpThread extends Thread {
 	private final Output out;
 	private final LinkedBlockingQueue<DatagramPacket> inputs;
 	private volatile boolean running;
-	private final Map<InetSocketAddress, KcpOnUdp> kcps;
+	private final Map<InetSocketAddress, KcpOn> kcps;
 	private final KcpListerner listerner;
 	private int nodelay;
 	private int interval = Kcp.IKCP_INTERVAL;
@@ -113,7 +113,7 @@ public class KcpThread extends Thread {
 			// input
 			while (!this.inputs.isEmpty()) {
 				DatagramPacket dp = this.inputs.remove();
-				KcpOnUdp ku = this.kcps.get(dp.sender());
+				KcpOn ku = this.kcps.get(dp.sender());
 				ByteBuf content = dp.content();
 				if (ku == null) {
 					ku = new KcpOnUdp(this.out, dp.sender(), local, this.listerner);// 初始化
@@ -131,8 +131,8 @@ public class KcpThread extends Thread {
 				ku.input(content);
 			}
 			// update
-			KcpOnUdp temp = null;
-			for (KcpOnUdp ku : this.kcps.values()) {
+			KcpOn temp = null;
+			for (KcpOn ku : this.kcps.values()) {
 				if (ku.isClosed()) {
 					temp = ku;
 				} else {
@@ -206,7 +206,7 @@ public class KcpThread extends Thread {
 			dp.release();
 		}
 		this.inputs.clear();
-		for (KcpOnUdp ku : this.kcps.values()) {
+		for (KcpOn ku : this.kcps.values()) {
 			if (!ku.isClosed()) {
 				ku.release();
 			}

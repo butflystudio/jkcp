@@ -1,17 +1,10 @@
-/**
- * 测试
- */
-package test;
+package test.local;
 
 import io.netty.buffer.ByteBuf;
 import java.nio.charset.Charset;
-import org.beykery.jkcp.KcpOnUdp;
+import org.beykery.jkcp.KcpOn;
 import org.beykery.jkcp.KcpServer;
 
-/**
- *
- * @author beykery
- */
 public class JkcpLocalServer extends KcpServer {
 
 	public JkcpLocalServer(int port, int workerSize) {
@@ -19,19 +12,19 @@ public class JkcpLocalServer extends KcpServer {
 	}
 
 	@Override
-	public void handleReceive(ByteBuf bb, KcpOnUdp kcp) {
+	public void handleReceive(ByteBuf bb, KcpOn kcp) {
 		String content = bb.toString(Charset.forName("utf-8"));
 		System.out.println("msg:" + content + " kcp--> " + kcp);
 		kcp.send(bb);// echo
 	}
 
 	@Override
-	public void handleException(Throwable ex, KcpOnUdp kcp) {
+	public void handleException(Throwable ex, KcpOn kcp) {
 		System.out.println(ex);
 	}
 
 	@Override
-	public void handleClose(KcpOnUdp kcp) {
+	public void handleClose(KcpOn kcp) {
 		System.out.println("客户端离开:" + kcp);
 		System.out.println("waitSnd:" + kcp.getKcp().waitSnd());
 	}

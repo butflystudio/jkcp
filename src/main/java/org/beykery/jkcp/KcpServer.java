@@ -20,7 +20,6 @@ import java.net.InetSocketAddress;
  * @author beykery
  */
 public abstract class KcpServer implements Output, KcpListerner {
-
 	private final NioDatagramChannel channel;
 	private final InetSocketAddress addr;
 	private int nodelay;
@@ -43,14 +42,13 @@ public abstract class KcpServer implements Output, KcpListerner {
 	 * @param workerSize
 	 */
 	public KcpServer(int port, int workerSize) {
-		if (port <= 0 || workerSize <= 0) { throw new IllegalArgumentException("参数非法"); }
+		if (port < 0 || workerSize <= 0) throw new IllegalArgumentException("参数非法");
 		this.workers = new KcpThread[workerSize];
 		final NioEventLoopGroup nioEventLoopGroup = new NioEventLoopGroup();
 		Bootstrap bootstrap = new Bootstrap();
 		bootstrap.channel(NioDatagramChannel.class);
 		bootstrap.group(nioEventLoopGroup);
 		bootstrap.handler(new ChannelInitializer<NioDatagramChannel>() {
-
 			@Override
 			protected void initChannel(NioDatagramChannel ch) throws Exception {
 				ChannelPipeline cp = ch.pipeline();
@@ -199,7 +197,7 @@ public abstract class KcpServer implements Output, KcpListerner {
 	 * @param bb
 	 * @param ku
 	 */
-	public void send(ByteBuf bb, KcpOnUdp ku) {
+	public void send(ByteBuf bb, KcpOn ku) {
 		ku.send(bb);
 	}
 
@@ -222,7 +220,6 @@ public abstract class KcpServer implements Output, KcpListerner {
 	 * handler
 	 */
 	public class UdpHandler extends ChannelInboundHandlerAdapter {
-
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 			DatagramPacket dp = (DatagramPacket) msg;
